@@ -15,6 +15,10 @@ dependencies:
   tuple:
   draggable_widget:
   permission_handler:
+  flutter_staggered_grid_view:
+  focus_detector:
+  intl:
+  avatar_glow: ^2.0.2
 
 dev_dependencies:
   flutter_test:

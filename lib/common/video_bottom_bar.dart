@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:hmssdk_flutter_uikit/meeting_store.dart';
+import 'package:hmssdk_flutter_uikit/hms_video_call.dart';
 import 'package:provider/provider.dart';
 
-class VideoButtomBar extends StatefulWidget {
-  final MeetingStore meetingStore;
+class VideoBottomBar extends StatefulWidget {
+  final HMSVideoCall hmsVideoCall;
   final List<Widget> addItem;
-  const VideoButtomBar(
-      {Key? key, required this.meetingStore, this.addItem = const []})
+  const VideoBottomBar(
+      {Key? key, required this.hmsVideoCall, this.addItem = const []})
       : super(key: key);
 
   @override
-  State<VideoButtomBar> createState() => _VideoButtomBarState();
+  State<VideoBottomBar> createState() => _VideoBottomBarState();
 }
 
-class _VideoButtomBarState extends State<VideoButtomBar> {
+class _VideoBottomBarState extends State<VideoBottomBar> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (context) => widget.meetingStore,
+        create: (context) => widget.hmsVideoCall,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Selector<MeetingStore, bool>(
+            Selector<HMSVideoCall, bool>(
               selector: (_, meetingStore) => meetingStore.isVideoOn,
               builder: (_, isVideoOn, __) {
                 return Container(
@@ -30,7 +30,7 @@ class _VideoButtomBarState extends State<VideoButtomBar> {
                         tooltip: 'Video',
                         iconSize: 24,
                         onPressed: () {
-                          widget.meetingStore.switchVideo();
+                          widget.hmsVideoCall.switchVideo();
                         },
                         icon: Icon(
                           isVideoOn ? Icons.videocam : Icons.videocam_off,
@@ -38,7 +38,7 @@ class _VideoButtomBarState extends State<VideoButtomBar> {
                         )));
               },
             ),
-            Selector<MeetingStore, bool>(
+            Selector<HMSVideoCall, bool>(
               selector: (_, meetingStore) => meetingStore.isMicOn,
               builder: (_, isMicOn, __) {
                 return Container(
@@ -47,7 +47,7 @@ class _VideoButtomBarState extends State<VideoButtomBar> {
                         tooltip: 'Audio',
                         iconSize: 24,
                         onPressed: () {
-                          widget.meetingStore.switchAudio();
+                          widget.hmsVideoCall.switchAudio();
                         },
                         icon: Icon(
                           isMicOn ? Icons.mic : Icons.mic_off,
@@ -61,7 +61,7 @@ class _VideoButtomBarState extends State<VideoButtomBar> {
                   tooltip: 'Leave Or End',
                   iconSize: 24,
                   onPressed: () async {
-                    widget.meetingStore.leave();
+                    widget.hmsVideoCall.leave();
                     // Navigator.pop(context);
                   },
                   icon: const CircleAvatar(

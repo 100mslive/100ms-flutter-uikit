@@ -2,26 +2,26 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import 'package:hmssdk_flutter_uikit/meeting_store.dart';
-import 'package:hmssdk_flutter_uikit/video_call.dart';
+import 'package:hmssdk_flutter_uikit/hms_video_call.dart';
+import 'package:hmssdk_flutter_uikit/normal_video_call/video_call.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
-class NormalVideoCall extends StatefulWidget {
+class NormalCall extends StatefulWidget {
   final String token, name;
-  final MeetingStore meetingStore;
-  const NormalVideoCall(
+  final HMSVideoCall hmsVideoCall;
+  const NormalCall(
       {required this.token,
       required this.name,
-      required this.meetingStore,
+      required this.hmsVideoCall,
       Key? key})
       : super(key: key);
 
   @override
-  State<NormalVideoCall> createState() => _NormalVideoCallState();
+  State<NormalCall> createState() => _NormalCallState();
 }
 
-class _NormalVideoCallState extends State<NormalVideoCall> {
+class _NormalCallState extends State<NormalCall> {
   bool permission = false;
   Future<bool> getPermissions() async {
     if (Platform.isIOS) return true;
@@ -33,6 +33,9 @@ class _NormalVideoCallState extends State<NormalVideoCall> {
     }
     while ((await Permission.microphone.isDenied)) {
       await Permission.microphone.request();
+    }
+    while ((await Permission.bluetoothConnect.isDenied)) {
+      await Permission.bluetoothConnect.request();
     }
     return true;
   }
@@ -51,12 +54,12 @@ class _NormalVideoCallState extends State<NormalVideoCall> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (context) => widget.meetingStore,
-        child: Consumer<MeetingStore>(
-          builder: (context, provider, child) => Selector<MeetingStore, bool>(
+        create: (context) => widget.hmsVideoCall,
+        child: Consumer<HMSVideoCall>(
+          builder: (context, provider, child) => Selector<HMSVideoCall, bool>(
             selector: (_, meetingStore) => meetingStore.isMeetingStarted,
             builder: (context, isMeetingStarted, __) {
-              if (context.read<MeetingStore>().isRoomEnded) {
+              if (context.read<HMSVideoCall>().isRoomEnded) {
                 return const Center(
                   child: Text("Room Ended"),
                 );
@@ -67,7 +70,7 @@ class _NormalVideoCallState extends State<NormalVideoCall> {
                 );
               }
               if (!isMeetingStarted) {
-                context.read<MeetingStore>().join(widget.name, widget.token);
+                context.read<HMSVideoCall>().join(widget.name, widget.token);
                 return const Center(
                   child: Text("Verify Room"),
                 );

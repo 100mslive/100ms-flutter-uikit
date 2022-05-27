@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hmssdk_flutter/hmssdk_flutter.dart';
-import 'package:hmssdk_flutter_uikit/meeting_store.dart';
+import 'package:hmssdk_flutter_uikit/hms_video_call.dart';
 import 'package:hmssdk_flutter_uikit/peer_track_node.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
@@ -11,9 +11,9 @@ class VideoCall extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MeetingStore>(
+    return Consumer<HMSVideoCall>(
       builder: (context, provider, child) =>
-          Selector<MeetingStore, Tuple3<PeerTrackNode?, PeerTrackNode?, int>>(
+          Selector<HMSVideoCall, Tuple3<PeerTrackNode?, PeerTrackNode?, int>>(
         selector: (_, meetingStore) => Tuple3(
           meetingStore.peerTracks.isNotEmpty
               ? meetingStore.peerTracks[0]
@@ -70,7 +70,7 @@ class VideoCall extends StatelessWidget {
                                 Icons.videocam_off,
                                 size: 50,
                                 color: Colors.red,
-                              ),                              
+                              ),
                               Text(
                                 data.item2!.peer.name,
                                 style: const TextStyle(fontSize: 20),
